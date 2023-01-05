@@ -15,15 +15,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "email")
     private String username;
 
     private String password;
 
-    private String email;
+    private String firstName;
 
-    private String name;
+    private String lastName;
 
-    private String surname;
+    private int Age;
 
     @ManyToMany
     @JoinTable(name = "users_roles",

@@ -1,4 +1,4 @@
-package ru.kata.spring.boot_security.demo.controllers;
+package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,5 +20,11 @@ public class UserController {
     public String userPage(Model model, Principal principal) {
         model.addAttribute("user", userService.findByUsername(principal.getName()));
         return "user";
+    }
+
+    @GetMapping("/userWithAdminRole")
+    public String userWithAdminRolePage(Model model, Principal principal) {
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        return "userWithAdminRole";
     }
 }

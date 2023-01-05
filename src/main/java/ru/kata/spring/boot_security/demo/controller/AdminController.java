@@ -9,6 +9,7 @@ import ru.kata.spring.boot_security.demo.entity.User;
 import ru.kata.spring.boot_security.demo.service.RoleService;
 import ru.kata.spring.boot_security.demo.service.UserService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -28,32 +29,24 @@ public class AdminController {
         return "redirect:/login";
     }
 
-    @GetMapping("/admin")
-    public String allUsersPageForAdmins(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        return "admin";
+    @GetMapping("/login")
+    public String loginPage() {
+        return "login";
     }
 
-    @GetMapping("/admin/addUser")
-    public String addUserPage(@ModelAttribute("user") User user, Model model) {
+    @GetMapping("/admin")
+    public String allUsersPageForAdmins(@ModelAttribute("newUser") User user, Model model, Principal principal) {
         List<Role> listRoles = roleService.listRoles();
+        model.addAttribute("user", userService.findByUsername(principal.getName()));
+        model.addAttribute("users", userService.getAllUsers());
         model.addAttribute("roles", listRoles);
-        return "addUser";
+        return "admin";
     }
 
     @PostMapping()
     public String createUser(@ModelAttribute("user") User user) {
         userService.addUser(user);
         return "redirect:/admin";
-    }
-
-    @GetMapping("/admin/editUser{id}")
-    public String editUser(Model model, @PathVariable("id") long id) {
-        User user = userService.getOneUser(id);
-        List<Role> listRoles = roleService.listRoles();
-        model.addAttribute("user", user);
-        model.addAttribute("listRoles", listRoles);
-        return "/editUser";
     }
 
     @PatchMapping("/editUser")
